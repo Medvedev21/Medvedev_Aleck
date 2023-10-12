@@ -1,4 +1,4 @@
-df <- read.csv("zd4.csv")
+df <- read.csv("zd3.csv")
 print(head(df))
 df <- df %>%
   filter(Income > 30000)
