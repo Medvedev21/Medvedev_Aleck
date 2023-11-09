@@ -38,7 +38,7 @@ scatter_plot
 #heatmap_plot <- heatmap_plot %>% colorbar(title = "Income_avg_edu")
 #heatmap_plot <- layout(heatmap_plot, title = "Тепловая карта Education vs. Marital_Status")
 #heatmap_plot
-#не понял откуда взялось Income_avg_edu
+
 labels <- c("Категория 1", "Категория 2", "Категория 3")
 values <- c(30, 40, 50)
 tree_map_data <- data.frame(
