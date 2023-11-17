@@ -50,9 +50,9 @@ ui <- dashboardPage(
   )
 )
 
-# Define the server logic
+
 server <- function(input, output) {
-  # Generate plots for the dashboard
+  
   output$plotActiveCampaigns <- renderPlot({
     ggplot(campaign_data, aes(x = CAMPAIGN, y = END_DAY - START_DAY)) +
       geom_bar(stat = "identity") +
@@ -60,21 +60,20 @@ server <- function(input, output) {
   })
   
   output$plotUniqueCustomers <- renderPlot({
-    # Check if the data is not empty
+    
     if(nrow(transaction_data) == 0) {
       print("No data available to plot.")
       return(NULL)
     }
     
-    # Simplify the plot to just a basic histogram of household_key
-    # Assuming household_key represents unique customers
+   
     ggplot(transaction_data, aes(x = household_key)) +
       geom_histogram(stat = "count") +
       labs(x = "Unique Customers", y = "Frequency", title = "Unique Customers Distribution")
   })
   
   output$plotAveragePurchase <- renderPlot({
-    # Assuming transaction_data has a 'household_key' and 'SALES_VALUE' columns
+    
     avg_purchase_data <- transaction_data %>%
       group_by(household_key) %>%
       summarise(Average_Purchase = mean(SALES_VALUE))
@@ -84,26 +83,26 @@ server <- function(input, output) {
   })
   
   output$plotTotalProductsSold <- renderPlot({
-    # Summarize the total quantity sold by product
+    
     total_sales_data <- transaction_data %>%
       group_by(PRODUCT_ID) %>%
       summarise(Total_Sold = sum(QUANTITY)) %>%
-      arrange(desc(Total_Sold)) # arrange in descending order
+      arrange(desc(Total_Sold)) 
     
-    # Check if the data frame is empty
+    
     if(nrow(total_sales_data) == 0) {
       print("No data available to plot.")
       return(NULL)
     }
     
-    # Plot the total products sold using a bar plot
+    
     ggplot(total_sales_data, aes(x = reorder(PRODUCT_ID, Total_Sold), y = Total_Sold)) +
       geom_bar(stat = "identity") +
       labs(x = "Product ID", y = "Total Quantity Sold", title = "Total Products Sold") +
       theme(axis.text.x = element_text(angle = 90, hjust = 1)) # Rotate x labels if needed
   })
   
-  # Download handler for active marketing campaigns
+  
   output$downloadActiveCampaigns <- downloadHandler(
     filename = function() {
       paste("active_marketing_campaigns-", Sys.Date(), ".csv", sep = "")
@@ -115,7 +114,7 @@ server <- function(input, output) {
     }
   )
   
-  # Download handler for unique customers
+  
   output$downloadUniqueCustomers <- downloadHandler(
     filename = function() {
       paste("unique_customers-", Sys.Date(), ".csv", sep = "")
@@ -127,7 +126,7 @@ server <- function(input, output) {
     }
   )
   
-  # Download handler for average purchase per family
+  
   output$downloadAveragePurchase <- downloadHandler(
     filename = function() {
       paste("average_purchase_per_family-", Sys.Date(), ".csv", sep = "")
@@ -142,7 +141,7 @@ server <- function(input, output) {
     }
   )
   
-  # Download handler for total products sold
+  
   output$downloadTotalProducts <- downloadHandler(
     filename = function() {
       paste("total_products_sold-", Sys.Date(), ".csv", sep = "")
@@ -156,5 +155,5 @@ server <- function(input, output) {
 }
 
 
-# Run the app
+
 shinyApp(ui = ui, server = server)
